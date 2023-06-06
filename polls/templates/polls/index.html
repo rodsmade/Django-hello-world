@@ -1,0 +1,11 @@
+<h1>hallay this is inside polls</h1>
+
+{% if latest_questions_list %}
+    <ul>
+    {% for question in latest_questions_list %}
+        <li><a href="{% url 'polls:batatafrita' question.id %}">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
