@@ -1,3 +1,9 @@
+#moi meme
+.gitignore
+
+#Vscode
+.vscode
+
 # Django #
 *.log
 *.pot
