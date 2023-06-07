@@ -24,6 +24,13 @@ class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/details.html"
 
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet.
+        """
+        list = Question.objects.filter(pub_date__lte=timezone.now())
+        return list
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
