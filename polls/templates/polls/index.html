@@ -1,10 +1,12 @@
 <h1>hallay this is inside polls</h1>
 
-{% if latest_question_list %}
+{% if object_list %}
     <ul>
-    {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:details' question.id %}">{{ question.question_text }}</a></li>
-    {% endfor %}
+        {% with object_list as latest_questions %}
+            {% for question in latest_questions %}
+                <li><a href="{% url 'polls:details' question.id %}">{{ question.question_text }}</a></li>
+            {% endfor %}
+        {% endwith %}
     </ul>
 {% else %}
     <p>No polls are available.</p>

@@ -1,4 +1,4 @@
-"""this_is_a_project URL Configuration
+"""my_polling_project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from .views import qqcoisa
 
 urlpatterns = [
     # this is boilerplate:
@@ -24,4 +25,5 @@ urlpatterns = [
     path("polls/", include("polls.urls")),
     # no bullshit straight to the point 'an endpoint with a raw view':
     path("", view=lambda x: HttpResponse("this path has no view just straight up returns a response")),
+    path("path-with-views", view=qqcoisa),
 ]
