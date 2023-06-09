@@ -11,3 +11,12 @@
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+
+
+<form action="{% url 'polls:index' %}" method="post">
+    {% csrf_token %}
+    <h3>Submit a new poll</h3>
+    <label for="question-text">Question (max 200 characters):</label><br>
+    <textarea id="question-text" name="question-text" maxlength="200" rows="4" cols="50"></textarea><br>
+    <input type="submit" value="Submit">
+</form>
