@@ -24,7 +24,12 @@ class IndexView(generic.ListView):
             return render(request
                         , self.template_name
                         , {"error_message": "Question is too long."})
-        Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now())
+        if request.user.is_authenticated:
+            owner = request.user.username
+            Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now(), owner=owner)
+        else:
+            Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now())
+            
         return HttpResponseRedirect(reverse("polls:index"))
 
 class DetailView(generic.DetailView):

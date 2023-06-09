@@ -8,7 +8,7 @@
     <ul>
         {% with object_list as latest_questions %}
             {% for question in latest_questions %}
-                <li><a href="{% url 'polls:details' question.id %}">{{ question.question_text }}</a></li>
+                <li><a href="{% url 'polls:details' question.id %}">{{ question.question_text }}</a>, submitted by: {{ question.owner }}</li>
             {% endfor %}
         {% endwith %}
     </ul>
@@ -16,7 +16,7 @@
     <p>No polls are available.</p>
 {% endif %}
 
-
+{% if user.is_authenticated  %}
 <form action="{% url 'polls:index' %}" method="post">
     {% csrf_token %}
     <h3>Submit a new poll</h3>
@@ -24,3 +24,4 @@
     <textarea id="question-text" name="question-text" maxlength="200" rows="4" cols="50"></textarea><br>
     <input type="submit" value="Submit">
 </form>
+{% endif %}
