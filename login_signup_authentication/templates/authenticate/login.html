@@ -1,4 +1,10 @@
-hi this is a login page
+<h1>hi this is a login page</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+{% endif %}
 
 <form method="post" action="{% url 'login_signup_authentication:index' %}">
     {% csrf_token %}

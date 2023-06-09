@@ -15,8 +15,8 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 return redirect(reverse("polls:index"))
-
-    return render(request, 'authenticate/login.html', {"form": LoginForm()})
-
-
-
+            else:
+                messages.success(request, "Username and/or password don't match. Try again.")
+                return render(request, 'authenticate/login.html', {"form": LoginForm()})
+    else:
+        return render(request, 'authenticate/login.html', {"form": LoginForm()})
