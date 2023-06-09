@@ -1,0 +1,7 @@
+hi this is a login page
+
+<form method="post" action="{% url 'login_signup_authentication:index' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>

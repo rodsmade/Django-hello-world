@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # include() is used to include other urls.py files from elsewhere in the project:
     path("polls/", include("polls.urls")),
+    path("login/", include("login_signup_authentication.urls")),
     # no bullshit straight to the point 'an endpoint with a raw view':
     path("", view=lambda x: HttpResponse("this path has no view just straight up returns a response")),
     path("path-with-views", view=qqcoisa),
