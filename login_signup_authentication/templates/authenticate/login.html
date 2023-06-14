@@ -1,3 +1,7 @@
+{% extends 'polls/base.html' %}
+
+{% block content %}
+
 <h1>hi this is a login page</h1>
 
 {% if messages %}
@@ -6,8 +10,10 @@
     {% endfor %}
 {% endif %}
 
-<form method="post" action="{% url 'login_signup_authentication:index' %}">
+<form method="post" action="{% url 'login_signup_authentication:login' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
+
+{% endblock %}
