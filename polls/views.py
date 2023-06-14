@@ -1,11 +1,22 @@
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 
 from .models import Question, Choice
+
+def _insert_question(template_name, request, redirect_url):
+    # Process the POST request and insert the question in the database
+    if (len(request.POST["question-text"]) > 200):
+            return render(request, template_name, context={"error_message": "Question is too long."})
+    if request.user.is_authenticated:
+        Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now(), owner=request.user.username)
+    else:
+        Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now())
+
+    return HttpResponseRedirect(reverse(redirect_url))
 
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
@@ -20,17 +31,24 @@ class IndexView(generic.ListView):
         return render(request, self.template_name, context={"object_list": self.get_queryset()})
 
     def post(self, request):
-        if (len(request.POST["question-text"]) > 200):
-            return render(request
-                        , self.template_name
-                        , {"error_message": "Question is too long."})
-        if request.user.is_authenticated:
-            owner = request.user.username
-            Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now(), owner=owner)
-        else:
-            Question.objects.create(question_text=request.POST["question-text"], pub_date=timezone.now())
-            
-        return HttpResponseRedirect(reverse("polls:index"))
+        return _insert_question(self.template_name, request, "polls:index")
+
+class MyQuestions(generic.DetailView):
+    template_name = "polls/my_questions.html"
+    context_object_name = "my_questions_list"
+    model = Question
+
+    def get_queryset(self, username):
+        """Return all questions published by current logged user."""
+        print("entrou username eh", username)
+        return Question.objects.filter(owner=username).order_by("-pub_date")
+
+    def get(self, request):
+        print("roi", request.user.username)
+        return render(request, self.template_name, context={"object_list": self.get_queryset(request.user.username)})
+
+    def post(self, request):
+        return _insert_question(self.template_name, request, "polls:polls-by-user")
 
 class DetailView(generic.DetailView):
     model = Question
