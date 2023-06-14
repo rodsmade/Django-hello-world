@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-<h1>hallay this is inside polls</h1>
+<h1>hallay {% if user.is_authenticated  %} {{ user.username }},{% endif %} this is inside polls</h1>
 
 {% if object_list %}
     <ul>
