@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from .models import Question, Choice
 
@@ -18,6 +20,7 @@ def _insert_question(template_name, request, redirect_url):
 
     return HttpResponseRedirect(reverse(redirect_url))
 
+@method_decorator(login_required, name='dispatch')
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
     # context_object_name = "latest_question_list"
@@ -33,6 +36,7 @@ class IndexView(generic.ListView):
     def post(self, request):
         return _insert_question(self.template_name, request, "polls:index")
 
+@method_decorator(login_required, name='dispatch')
 class MyQuestions(generic.DetailView):
     template_name = "polls/my_questions.html"
     context_object_name = "my_questions_list"
@@ -44,12 +48,12 @@ class MyQuestions(generic.DetailView):
         return Question.objects.filter(owner=username).order_by("-pub_date")
 
     def get(self, request):
-        print("roi", request.user.username)
         return render(request, self.template_name, context={"object_list": self.get_queryset(request.user.username)})
 
     def post(self, request):
         return _insert_question(self.template_name, request, "polls:polls-by-user")
 
+@method_decorator(login_required, name='dispatch')
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/details.html"
@@ -61,6 +65,7 @@ class DetailView(generic.DetailView):
         list = Question.objects.filter(pub_date__lte=timezone.now())
         return list
 
+@method_decorator(login_required, name='dispatch')
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
@@ -72,6 +77,7 @@ class ResultsView(generic.DetailView):
         list = Question.objects.filter(pub_date__lte=timezone.now())
         return list
 
+@method_decorator(login_required, name='dispatch')
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:
